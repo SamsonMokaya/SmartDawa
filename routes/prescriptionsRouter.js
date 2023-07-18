@@ -14,12 +14,16 @@ const {
     getPrescriptionById,
     getMedicineById,
     checkSession,
+    destroysession
 
     } = require('../controllers/prescriptionsController');
 
 
 // Route to check if session exists
 router.get('/', checkSession);
+
+// Route to destroy session
+router.post('/logout', destroysession);
 
 // Login route for doctor
 router.post('/dlogin', doctorLogin);

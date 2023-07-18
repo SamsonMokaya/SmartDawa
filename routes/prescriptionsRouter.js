@@ -3,6 +3,8 @@ const app = express();
 
 const router = express.Router();
 const { 
+    doctorLogin,
+    pharmacistLogin,
     getMedicines, 
     createPrescription, 
     getAllPrescriptions, 
@@ -11,8 +13,19 @@ const {
     updatePrescriptionStatus,
     getPrescriptionById,
     getMedicineById,
+    checkSession,
 
     } = require('../controllers/prescriptionsController');
+
+
+// Route to check if session exists
+router.get('/', checkSession);
+
+// Login route for doctor
+router.post('/dlogin', doctorLogin);
+
+// Login route for pharmacist
+router.post('/plogin', pharmacistLogin);
 
 // Route to get all medicines
 router.get('/medicine', getMedicines);

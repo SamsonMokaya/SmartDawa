@@ -1,5 +1,93 @@
 const pool = require('../db');
 
+
+const doctorLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    console.log(email)
+    console.log(password)
+
+    // Check if the email exists in the doctor table
+    const [doctorRows] = await pool.query('SELECT * FROM doctor WHERE email = ? and password = ?', [email, password]);
+
+    if (doctorRows.length === 0) {
+      // User not found
+      return res.status(401).json({ error: 'Invalid emails or password' });
+    }
+
+    const doctor = doctorRows[0];
+
+
+    // Check the user's role
+    if (doctor.role === 1) {
+      // User is a doctor
+      req.session.name = doctor.DoctorName;
+      return res.status(200).json({ role: 'doctor', name: doctor.DoctorName });
+    }
+
+    // Invalid role
+    res.status(401).json({ error: 'Invalid role' });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'An error occurred during login' });
+  }
+};
+
+// get session
+const checkSession = async (req, res) => {
+  if(req.session.name){
+    res.status(200).json({valid: true, name: req.session.name });
+  }else{
+    res.json({valid: false});
+  }
+}
+
+//logout session
+const destroysession = async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error while destroying session:", err);
+      return res.status(500).json({ error: "An error occurred during logout" });
+    }
+    res.status(200).json({ message: "Logout successful" });
+  });
+};
+
+
+const pharmacistLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Check if the email exists in the pharmacist table
+    const [pharmacistRows] = await pool.query('SELECT * FROM pharmacist WHERE email = ? and password = ?', [email, password]);
+
+    if (pharmacistRows.length === 0) {
+      // Email not found
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const pharmacist = pharmacistRows[0];
+
+    // Check the user's role
+    if (pharmacist.role === 2) {
+      // User is a pharmacist
+      return res.status(200).json({ role: 'pharmacist' });
+    }
+
+    // Handle other roles if needed
+
+    // Invalid role
+    res.status(401).json({ error: 'Invalid role' });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'An error occurred during login' });
+  }
+};
+
+
+
+
 // Fetch all medicines
 const getMedicines = async (req, res) => {
   try {
@@ -176,6 +264,10 @@ const updatePrescriptionStatus = async (req, res) => {
 
 
 module.exports = {
+  destroysession,
+  checkSession,
+  pharmacistLogin,
+  doctorLogin,
   getMedicines,
   createPrescription,
   getAllPrescriptions,

@@ -14,10 +14,18 @@ const {
     getPrescriptionById,
     getMedicineById,
     checkSession,
-    destroysession
+    destroysession,
+    getMedicineCount,
+  getPrescriptionCount,
+  deleteMedicine,
 
     } = require('../controllers/prescriptionsController');
 
+// Route to get prescription count
+router.get('/prescription/count',  getPrescriptionCount )
+
+// Route to get medicine count
+router.get('/medicine/count', getMedicineCount)
 
 // Route to check if session exists
 router.get('/', checkSession);
@@ -33,6 +41,9 @@ router.post('/plogin', pharmacistLogin);
 
 // Route to get all medicines
 router.get('/medicine', getMedicines);
+
+// Route for deleting a medicine by ID
+router.delete('/medicine/:id', deleteMedicine);
 
 // Route to get a specific medicine by ID
 router.get('/medicine/:medicineId', getMedicineById);
@@ -50,7 +61,7 @@ router.post('/prescription', createPrescription)
 router.get('/prescription', getAllPrescriptions);
 
 // Route to get a specific prescription by ID
-router.get('/prescription/:prescriptionId', getPrescriptionById);
+router.get('/prescription/:id', getPrescriptionById);
 
 // Route to update prescription status
 router.put('/prescription/:prescriptionId', updatePrescriptionStatus);

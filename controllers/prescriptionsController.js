@@ -4,7 +4,6 @@ const pool = require('../db');
 const doctorLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email, "emsi")
 
     // Check if the email exists in the doctor table
     const [doctorRows] = await pool.query('SELECT * FROM doctor WHERE email = ? and password = ?', [email, password]);
@@ -22,7 +21,6 @@ const doctorLogin = async (req, res) => {
       return res.status(401).json({ error: 'Invalid email' });
     }
   } catch (error) {
-    console.error('Error during login:', error);
     res.status(500).json({ error: 'An error occurred during login' });
   }
 };
@@ -51,7 +49,6 @@ const pharmacistLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log(email)
 
 
     // Check if the email exists in the pharmacist table

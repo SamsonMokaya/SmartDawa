@@ -25,14 +25,15 @@ const doctorLogin = async (req, res) => {
   }
 };
 
-// get session
+// check session
 const checkSession = async (req, res) => {
-  if(req.session.name){
-    res.status(200).json({valid: true, name: req.session.name });
-  }else{
-    res.json({valid: false});
-  }
+    if (req.session.name) {
+        res.status(200).json({ valid: true, name: req.session.name });
+    } else {
+        res.json({ valid: false });
+    }
 }
+
 
 //logout session
 const destroysession = async (req, res) => {
